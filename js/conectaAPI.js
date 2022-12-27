@@ -13,16 +13,28 @@ async function enviaDados (titulo, descricao, url, imagem) {
         },
         body: JSON.stringify({
             titulo: titulo,
-            descricao: descricao,
+            descricao: `${descricao} mil visualizações`,
             url: url,
             imagem: imagem
         })
     })
-    const dadosProcessados = dadosPrimarios.json();
+
+    if(!dadosPrimarios.ok) {
+        throw new Error('não foi possível carregar o vídeo AHAHAHAHAHAHAH');
+    }
+
+    const dadosProcessados = await dadosPrimarios.json();
+    return dadosProcessados;
+}
+
+async function buscaVideos (termoDeBusca) {
+    const dadosInicais = await fetch(`http://localhost:3000/videos?q=${termoDeBusca}`);
+    const dadosProcessados = dadosInicais.json();
     return dadosProcessados;
 }
 
 export const conectaApi = {
     carregaDados,
-    enviaDados
+    enviaDados,
+    buscaVideos
 }
